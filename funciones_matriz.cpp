@@ -2,7 +2,7 @@
 using namespace std;
 
 
-void c_matriz (int tamano ){
+int** c_matriz (int tamano ){
 
     int centro,contador = 1,i,j;
     int **matriz = new int*[tamano];
@@ -29,46 +29,129 @@ void c_matriz (int tamano ){
             if (i == centro && j == centro){
 
                 matriz[i][j] = 0;
-                cout << matriz [i][j] << " ";
+
+
 
             }
             else{
 
                 matriz[i][j] = contador;
                 contador = contador + 1;
-                cout << matriz[i][j] << " ";
+
+
 
             }
 
 
         }
-        cout << endl;
-    }
 
-    for(int i = 0; i < tamano; ++i) {
-        delete[] matriz[i];
     }
-    delete[] matriz;
+    return matriz;
+
 
 
 }
 
-void r_matriz (int** matrix, int tamano){
 
-    int** rot = new int*[tamano];
-    for (int i = 0; i < tamano; ++i) {
-        for (int j = 0; j < tamano; ++j) {
+void r_matriz (int** matriz, int n ) {
 
-            rot[tamano - j - 1][i] = matrix[i][j];
-            cout << rot[i][j]<<" ";
+    for (int i = 0; i < n / 2; i++) {
+
+        for (int j = i; j < n - i - 1; j++) {
+
+            // Almacena el valor actual
+            int temp = matriz[i][j];
+            
+            // Mueve valores de la derecha a la parte superior
+            matriz[i][j] = matriz[j][n - 1 - i];
+            
+            // Mueve valores de abajo a la derecha
+            matriz[j][n - 1 - i] = matriz[n - 1 - i][n - 1 - j];
+            
+            // Mueve valores de la izquierda a la parte inferior
+            matriz[n - 1 - i][n - 1 - j] = matriz[n - 1 - j][i];
+            
+            // Asignar temp a la izquierda
+            matriz[n - 1 - j][i] = temp;
+
+
         }
-        cout << endl ;
+
+    }
+}
+
+
+void p_matriz (int** matrix, int n){
+
+    for (int i = 0; i < n; ++i) {
+
+        for (int j = 0; j < n; ++j) {
+
+            cout << matrix[i][j] << " ";
+        }
+
+        cout << endl;
+    }
+}
+
+
+void l_matriz(int**& matriz, int n) {
+
+    for (int i = 0; i < n ; ++i) {
+
+        delete[] matriz[i];
     }
 
-    for ( int i = 0; i < tamano; ++i){
-        for ( int j = 0; j < tamano; ++j){
-            delete[] rot[i];
-        }
+    delete[] matriz;
+
+    matriz = nullptr;
+}
+
+
+int** conv_matriz(int** matrizOriginal,int& valores){
+
+    // Tomo una matriz de punteros de tamaño n, la elimino y creo una nueva con un tamaño 2n+1 diferente de n
+
+    int tamano = 0;
+
+    l_matriz(matrizOriginal,valores);
+
+    switch(valores){
+
+    case 3:
+        tamano = 5;
+        valores = tamano;
+
+        break;
+
+    case 5:
+        tamano = 9;
+        valores = tamano;
+
+        break;
+
+    case 7:
+        tamano = 11;
+        valores = tamano;
+
+        break;
+
+    case 9:
+        tamano = 13;
+        valores = tamano;
+
+        break;
+
+    default:
+        tamano = (2*valores)+1;
+        valores = tamano;
+
     }
-    delete[] rot;
+
+    int** nueva_m = c_matriz(tamano);
+
+
+
+    return nueva_m;
+
 }
